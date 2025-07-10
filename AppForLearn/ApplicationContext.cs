@@ -1,18 +1,35 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
+using Microsoft.EntityFrameworkCore;
 
 namespace AppForLearn
 {
+    /// <summary>
+    /// ApplicationContext it`s a class who makes querries to Data Base
+    /// </summary>
     public class ApplicationContext : DbContext
     {
+        /// <summary>
+        /// Products it`s a table in Data Base
+        /// </summary>
         public DbSet<Product> Products { get; set; }
-
+        /// <summary>
+        /// OnConfiguring it`s a method who makes a connection to Data Base
+        /// </summary>
+        /// <param name="optionsBuilder"></param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseNpgsql("Host=localhost;Port=5433;Username=postgres;Password=a;Database=postgres;");
         }
-
+        /// <summary>
+        /// SelectAllFromDataBase returns the entire contents of the Products table
+        /// </summary>
+        /// <returns></returns>
         public List<Product> SelectAllFromDataBase() => [.. from Product in Products select Product];
-
+        /// <summary>
+        /// returns one record from Database where id like in param
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public List<Product> SelectIdFromDatabase(int id) => [.. from Product in Products where Product.Id == id select Product];
 
         public List<Product> SelectNameFromDatabase(string name) => [.. from Product in Products where Product.Name == name select Product];

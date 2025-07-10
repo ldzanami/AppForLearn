@@ -1,8 +1,9 @@
 global using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 namespace AppForLearn
 {
-
     public class Program
     {
         public static void Main(string[] args)
@@ -11,6 +12,19 @@ namespace AppForLearn
 
 
             builder.Services.AddRazorPages();
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "AppForLearn API",
+                    Description = "An ASP.NET Core Web API for managing AppForLearn items"
+                });
+
+                var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+            });
 
             var app = builder.Build();
 
@@ -20,6 +34,8 @@ namespace AppForLearn
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
