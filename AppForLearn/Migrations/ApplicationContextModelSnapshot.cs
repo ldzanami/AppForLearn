@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace AppForLearn.Migrations
 {
-    [DbContext(typeof(ApplicationContext))]
+    [DbContext(typeof(ProductsGetQuerier))]
     partial class ApplicationContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

@@ -1,4 +1,7 @@
 ﻿
+using Microsoft.Extensions.Options;
+using System.Reflection;
+
 namespace AppForLearn
 {
     /// <summary>
@@ -6,12 +9,12 @@ namespace AppForLearn
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
-    public class GetRequestController : ControllerBase
+    public class ProductsGetRequestController : ControllerBase, IHttpGetRequester
     {
         /// <summary>
         /// Поле, которое содержит ссылку на объект контекста
         /// </summary>
-        public required ApplicationContext _appContext = new();
+        public required IDatabaseGetQuerier<List<Product>> databaseGetQuerier = new ProductsGetQuerier();
 
         /// <summary>
         /// Возвращает всё из таблицы Products
@@ -20,8 +23,8 @@ namespace AppForLearn
         [HttpGet]
         public IActionResult GetAll()
         {
-            var result = _appContext.SelectAllFromDataBase();
-            return result.Count > 0? Ok(result) : NoContent();
+            var result = databaseGetQuerier.SelectAllFromDataBase();
+            return result.Count > 0 ? Ok(result) : NoContent();
         }
         /// <summary>
         /// Возвращает товар по id
@@ -31,8 +34,8 @@ namespace AppForLearn
         [HttpGet("id")]
         public IActionResult GetToId([FromQuery] int id)
         {
-            var result = _appContext.SelectIdFromDatabase(id);
-            return result.Count > 0? Ok(result) : NoContent();
+            var result = databaseGetQuerier.SelectIdFromDatabase(id);
+            return result.Count > 0 ? Ok(result) : NoContent();
         }
 
         /// <summary>
@@ -46,8 +49,8 @@ namespace AppForLearn
         [HttpGet("rangeId")]
         public IActionResult GetRangeToId([FromQuery] int startId, [FromQuery] int endId, [FromQuery] bool isDesc)
         {
-            var result = isDesc ? _appContext.SelectRangeToIdDescFromDatabase(startId, endId) : _appContext.SelectRangeToIdFromDatabase(startId, endId);
-            return result.Count > 0? Ok(result) : NoContent();
+            var result = isDesc ? databaseGetQuerier.SelectRangeToIdDescFromDatabase(startId, endId) : databaseGetQuerier.SelectRangeToIdFromDatabase(startId, endId);
+            return result.Count > 0 ? Ok(result) : NoContent();
         }
 
         /// <summary>
@@ -59,7 +62,7 @@ namespace AppForLearn
         [HttpGet("sortedToId")]
         public IActionResult GetSortedToId([FromQuery] bool isDesc)
         {
-            var result = isDesc ? _appContext.SelectAllSortedToIdDescFromDatabase() : _appContext.SelectAllSortedToIdFromDatabase();
+            var result = isDesc ? databaseGetQuerier.SelectAllSortedToIdDescFromDatabase() : databaseGetQuerier.SelectAllSortedToIdFromDatabase();
             return result.Count > 0 ? Ok(result) : NoContent();
         }
 
@@ -71,8 +74,8 @@ namespace AppForLearn
         [HttpGet("Name")]
         public IActionResult GetToName([FromQuery] string name)
         {
-            var result = _appContext.SelectNameFromDatabase(name);
-            return result.Count > 0? Ok(result) : NoContent();
+            var result = databaseGetQuerier.SelectNameFromDatabase(name);
+            return result.Count > 0 ? Ok(result) : NoContent();
         }
 
         /// <summary>
@@ -83,8 +86,8 @@ namespace AppForLearn
         [HttpGet("sortedToName")]
         public IActionResult GetSortedToName([FromQuery] bool isDesc)
         {
-            var result = isDesc ? _appContext.SelectAllSortedToNameDescFromDatabase() : _appContext.SelectAllSortedToNameFromDatabase();
-            return result.Count > 0? Ok(result) : NoContent();
+            var result = isDesc ? databaseGetQuerier.SelectAllSortedToNameDescFromDatabase() : databaseGetQuerier.SelectAllSortedToNameFromDatabase();
+            return result.Count > 0 ? Ok(result) : NoContent();
         }
 
         /// <summary>
@@ -95,7 +98,7 @@ namespace AppForLearn
         [HttpGet("cost")]
         public IActionResult GetToCost([FromQuery] float cost)
         {
-            var result = _appContext.SelectCostFromDatabase(cost);
+            var result = databaseGetQuerier.SelectCostFromDatabase(cost);
             return result.Count > 0 ? Ok(result) : NoContent();
         }
 
@@ -107,10 +110,10 @@ namespace AppForLearn
         /// <param name="isDesc"></param>
         /// <returns></returns>
         [HttpGet("rangeCost")]
-        public IActionResult GerRangeToId([FromQuery] float startCost, [FromQuery] float endCost, [FromQuery] bool isDesc)
+        public IActionResult GetRangeToCost([FromQuery] float startCost, [FromQuery] float endCost, [FromQuery] bool isDesc)
         {
-            var result = isDesc ? _appContext.SelectRangeToCostDescFromDatabase(startCost, endCost) : _appContext.SelectRangeToCostFromDatabase(startCost, endCost);
-            return result.Count > 0? Ok(result) : NoContent();
+            var result = isDesc ? databaseGetQuerier.SelectRangeToCostDescFromDatabase(startCost, endCost) : databaseGetQuerier.SelectRangeToCostFromDatabase(startCost, endCost);
+            return result.Count > 0 ? Ok(result) : NoContent();
         }
 
         /// <summary>
@@ -121,8 +124,15 @@ namespace AppForLearn
         [HttpGet("sortedToCost")]
         public IActionResult GetSortedToCost([FromQuery] bool isDesc)
         {
-            var result = isDesc ? _appContext.SelectAllSortedToCostDescFromDatabase() : _appContext.SelectAllSortedToCostFromDatabase();
-            return result.Count > 0? Ok(result) : NoContent();
+            var result = isDesc ? databaseGetQuerier.SelectAllSortedToCostDescFromDatabase() : databaseGetQuerier.SelectAllSortedToCostFromDatabase();
+            return result.Count > 0 ? Ok(result) : NoContent();
+        }
+
+        [HttpGet("arrayToId")]
+        public IActionResult GetArrayToId([FromQuery] int[] ids)
+        {
+            var result = databaseGetQuerier.SelectArrayToIdFromDatabase(ids);
+            return result.Count > 0 ? Ok(result) : NoContent();
         }
     }
 }

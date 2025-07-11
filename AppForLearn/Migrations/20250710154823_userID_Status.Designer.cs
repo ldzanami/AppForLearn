@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace AppForLearn.Migrations
 {
-    [DbContext(typeof(ApplicationContext))]
+    [DbContext(typeof(ProductsGetQuerier))]
     [Migration("20250710154823_userID_Status")]
     partial class userID_Status
     {

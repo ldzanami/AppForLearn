@@ -1,4 +1,6 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
+
 namespace AppForLearn
 {
     /// <summary>
@@ -9,7 +11,8 @@ namespace AppForLearn
         /// <summary>
         /// Products id
         /// </summary>
-        public int Id { get; set; }
+        [Key]
+        public required int Id { get; set; }
         /// <summary>
         /// Products name
         /// </summary>
@@ -21,6 +24,7 @@ namespace AppForLearn
         /// <summary>
         /// Products cost
         /// </summary>
-        public double Cost { get; set; }
+        [Range(0.01, double.MaxValue, ErrorMessage = "Cost must be positive and bigger than zero")]
+        public required double Cost { get; set; }
     }
 }

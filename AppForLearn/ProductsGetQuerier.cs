@@ -6,7 +6,7 @@ namespace AppForLearn
     /// <summary>
     /// ApplicationContext it`s a class who makes querries to Data Base
     /// </summary>
-    public class ApplicationContext : DbContext
+    public class ProductsGetQuerier : DbContext, IDatabaseGetQuerier<List<Product>>
     {
         /// <summary>
         /// Products it`s a table in Data Base
@@ -55,5 +55,7 @@ namespace AppForLearn
         public List<Product> SelectRangeToCostFromDatabase(float startCost, float endCost) => [.. from Product in Products where Product.Cost >= startCost && Product.Cost <= endCost select Product];
 
         public List<Product> SelectRangeToCostDescFromDatabase(float startCost, float endCost) => [.. from Product in Products where Product.Cost >= startCost && Product.Cost <= endCost orderby Product.Cost descending select Product];
+
+        public List<Product> SelectArrayToIdFromDatabase(int[] ids) => [.. from Product in Products where ids.Contains(Product.Id) select Product];
     }
 }
