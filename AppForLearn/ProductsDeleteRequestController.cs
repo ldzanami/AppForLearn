@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using System.ComponentModel.DataAnnotations;
 
 namespace AppForLearn
 {
@@ -24,8 +25,15 @@ namespace AppForLearn
         }
 
         [HttpDelete("rangeToId")]
-        public async Task<IActionResult> DeleteRangeToId([FromQuery] int startId, [FromQuery] int endId)
+        public async Task<IActionResult> DeleteRangeToId(
+            [FromQuery]
+            [Range(1, int.MaxValue, ErrorMessage = "Id Must be positive")]
+            int startId,
+            [FromQuery]
+            [Range(1, int.MaxValue, ErrorMessage = "Id Must be positive")]
+            int endId)
         {
+            if(endId < startId) return BadRequest();
             await databaseDeleteQuerier.DeleteRangeToId(startId, endId);
             return Ok();
         }

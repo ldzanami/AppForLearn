@@ -17,7 +17,7 @@ namespace AppForLearn
 
         public async Task DeleteRangeToId(int startId,  int endId)
         {
-            var products = await GetProductsArrayToId([.. Enumerable.Range(startId, endId)]);
+            var products = await GetProductsArrayToId([.. Enumerable.Range(startId, endId - startId + 1)]);
             if (products.Count == 0) return;
             Products.RemoveRange(products!);
             await SaveChangesAsync();
