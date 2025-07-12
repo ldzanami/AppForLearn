@@ -2,9 +2,9 @@
 {
     public interface IDatabaseDeleteQuerier
     {
-        Task DeleteAll();
-        Task DeleteRangeToId(int startId,  int endId);
-        Task DeleteToId(int id);
-        Task DeleteArrayToId(int[] ids);
+        Task<bool> DeleteAll();
+        Task<bool> DeleteRangeToId(int startId,  int endId);
+        Task<bool> DeleteToId(int id);
+        Task<bool> DeleteArrayToId(int[] ids);
     }
 }

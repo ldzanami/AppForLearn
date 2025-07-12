@@ -13,30 +13,40 @@ namespace AppForLearn
 
         private async Task<List<Product>> GetProductsArrayToId(int[] ids) => await Products.Where(p => ids.Contains(p.Id)).ToListAsync();
 
-        public async Task DeleteAll() => await Database.ExecuteSqlRawAsync("delete from \"Products\"");
+        public async Task<bool> DeleteAll()
+        {
+            var result = await Products.Where(p => p.Id > 0).ToListAsync();
+            if (result.Count == 0) return false;
+            Products.RemoveRange(result);
+            await SaveChangesAsync();
+            return true;
+        }
 
-        public async Task DeleteRangeToId(int startId,  int endId)
+        public async Task<bool> DeleteRangeToId(int startId,  int endId)
         {
             var products = await GetProductsArrayToId([.. Enumerable.Range(startId, endId - startId + 1)]);
-            if (products.Count == 0) return;
+            if (products.Count == 0) return false;
             Products.RemoveRange(products!);
             await SaveChangesAsync();
+            return true;
         }
 
-        public async Task DeleteToId(int id)
+        public async Task<bool> DeleteToId(int id)
         {
             var product = await Products.FindAsync(id);
-            if (product == null) return;
+            if (product == null) return false;
             Products.Remove(product!);
             await SaveChangesAsync();
+            return true;
         }
 
-        public async Task DeleteArrayToId(int[] ids)
+        public async Task<bool> DeleteArrayToId(int[] ids)
         {
             var products = await GetProductsArrayToId(ids);
-            if (products.Count == 0) return;
+            if (products.Count == 0) return false;
             Products.RemoveRange(products!);
             await SaveChangesAsync();
+            return true;
         }
     }
 }

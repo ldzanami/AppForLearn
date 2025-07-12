@@ -27,7 +27,8 @@ namespace AppForLearn
                 return BadRequest(ModelState);
             }
             await databasePostQuerier.AddItems(products);
-            return Ok();
+            int[] ids = [..from product in products select product.Id];
+            return CreatedAtAction(actionName: "GetArrayToId", controllerName: "ProductsGetRequest", routeValues: new { Ids = ids }, value: products);
         }
     }
 }

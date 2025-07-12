@@ -1,6 +1,4 @@
-﻿
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace AppForLearn
 {
@@ -13,15 +11,15 @@ namespace AppForLearn
         [HttpDelete("all")]
         public async Task<IActionResult> DeleteAll()
         {
-            await databaseDeleteQuerier.DeleteAll();
-            return Ok();
+            var result = await databaseDeleteQuerier.DeleteAll();
+            return result? NoContent() : NotFound();
         }
 
         [HttpDelete("arrayToId")]
         public async Task<IActionResult> DeleteArrayToId([FromQuery] int[] ids)
         {
-            await databaseDeleteQuerier.DeleteArrayToId(ids);
-            return Ok();
+            var result = await databaseDeleteQuerier.DeleteArrayToId(ids);
+            return result ? NoContent() : NotFound();
         }
 
         [HttpDelete("rangeToId")]
@@ -34,15 +32,15 @@ namespace AppForLearn
             int endId)
         {
             if(endId < startId) return BadRequest();
-            await databaseDeleteQuerier.DeleteRangeToId(startId, endId);
-            return Ok();
+            var result = await databaseDeleteQuerier.DeleteRangeToId(startId, endId);
+            return result ? NoContent() : NotFound();
         }
 
         [HttpDelete("toId")]
         public async Task<IActionResult> DeleteToId([FromQuery] int id)
         {
-            await databaseDeleteQuerier.DeleteToId(id);
-            return Ok();
+            var result = await databaseDeleteQuerier.DeleteToId(id);
+            return result ? NoContent() : NotFound();
         }
     }
 }
